@@ -12,7 +12,7 @@
     }
     #card {
       width: 250px;
-      height: 400px;
+      height: 450px;
       margin: 20px auto;
       border: 3px solid #fff;
       border-radius: 10px;
@@ -51,10 +51,8 @@
   <input type="date" id="birthInput"><br>
 
   <!-- Buttons -->
-  <button onclick="drawByName()">Draw by Name</button>
-  <button onclick="drawByBirthdate()">Draw by Birthdate</button>
-  <button onclick="drawByToday()">Draw by Today</button>
-  <button onclick="drawRandom()">Draw Random</button>
+
+  <button onclick="drawYourCard()">Draw Your Card</button>
 
   <script>
     // Card deck (replace with all your images)
@@ -86,33 +84,41 @@
         defaultQuotes[index % defaultQuotes.length];
     }
 
-    function drawByName() {
-      const name = document.getElementById("nameInput").value.trim();
-      if (!name) return alert("Please enter your name!");
-      const sum = name.split("").reduce((a, c) => a + c.charCodeAt(0), 0);
-      const index = sum % cardImages.length;
-      showCard(cardImages[index], index);
-    }
-
-    function drawByBirthdate() {
-      const birth = document.getElementById("birthInput").value;
-      if (!birth) return alert("Please select your birthdate!");
-      const sum = birth.split("-").join("").split("").reduce((a, b) => a + parseInt(b), 0);
-      const index = sum % cardImages.length;
-      showCard(cardImages[index], index);
-    }
-
-    function drawByToday() {
-      const now = new Date();
-      const seed = now.getFullYear() + now.getMonth() + now.getDate();
-      const index = seed % cardImages.length;
-      showCard(cardImages[index], index);
-    }
 
     function drawRandom() {
       const index = Math.floor(Math.random() * cardImages.length);
       showCard(cardImages[index], index);
     }
+    
+    function hashString(str) {
+      let hash = 0;
+      for (let i = 0; i < str.length; i++) {
+        hash = (hash << 5) - hash + str.charCodeAt(i);
+        hash |= 0; // force 32-bit
+      }
+      return hash;
+    }
+
+    function drawYourCard() {
+      const name = document.getElementById("nameInput").value.trim();
+      const birth = document.getElementById("birthInput").value; // YYYY-MM-DD
+      const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD (today)
+    
+      if (!name || !birth) {
+        document.getElementById("result").innerText = "⚠️ Please enter your name and birth date.";
+        return;
+      }
+    
+      // Combine into one seed string
+      const seedStr = name + birth + today;
+    
+      // Get hash → index
+      const index = Math.abs(hashString(seedStr)) % cardImages.length;
+      
+      // Show card
+      showCard(cardImages[index], index);
+    }
+
   </script>
 </body>
 </html>
