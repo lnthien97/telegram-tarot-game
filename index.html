@@ -24,47 +24,51 @@
       margin-top: 20px;
       font-style: italic;
     }
-    button {
-      padding: 10px 20px;
+    button, input {
+      padding: 10px 15px;
       font-size: 16px;
-      margin-top: 20px;
-      cursor: pointer;
+      margin: 10px;
       border: none;
       border-radius: 5px;
+    }
+    button {
+      cursor: pointer;
       background: #ffcc00;
+    }
+    input {
+      width: 200px;
     }
   </style>
 </head>
 <body>
-  <h1>Tarot Draw</h1>
+  <h1>🔮 Tarot Card Game</h1>
+
   <div id="card"></div>
-  <p id="quote">Click the button to reveal a card...</p>
-  <button onclick="drawCard()">Draw Card</button>
+  <p id="quote">Choose a method to reveal your card...</p>
+
+  <!-- Inputs for name and birthdate -->
+  <input type="text" id="nameInput" placeholder="Enter your name"><br>
+  <input type="date" id="birthInput"><br>
+
+  <!-- Buttons -->
+  <button onclick="drawByName()">Draw by Name</button>
+  <button onclick="drawByBirthdate()">Draw by Birthdate</button>
+  <button onclick="drawByToday()">Draw by Today</button>
+  <button onclick="drawRandom()">Draw Random</button>
 
   <script>
-    // List of your card images
+    // Card deck (replace with all your images)
     const cardImages = [
       "00-TheFool.jpg","01-TheMagician.jpg","02-TheHighPriestess.jpg","03-TheEmpress.jpg",
       "04-TheEmperor.jpg","05-TheHierophant.jpg","06-TheLovers.jpg","07-TheChariot.jpg",
       "08-Strength.jpg","09-TheHermit.jpg","10-WheelOfFortune.jpg","11-Justice.jpg",
       "12-TheHangedMan.jpg","13-Death.jpg","14-Temperance.jpg","15-TheDevil.jpg",
       "16-TheTower.jpg","17-TheStar.jpg","18-TheMoon.jpg","19-TheSun.jpg",
-      "20-Judgement.jpg","21-TheWorld.jpg",
-      "Cups01.jpg","Cups02.jpg","Cups03.jpg","Cups04.jpg","Cups05.jpg","Cups06.jpg",
-      "Cups07.jpg","Cups08.jpg","Cups09.jpg","Cups10.jpg","Cups11.jpg","Cups12.jpg",
-      "Cups13.jpg","Cups14.jpg",
-      "Pentacles01.jpg","Pentacles02.jpg","Pentacles03.jpg","Pentacles04.jpg","Pentacles05.jpg",
-      "Pentacles06.jpg","Pentacles07.jpg","Pentacles08.jpg","Pentacles09.jpg","Pentacles10.jpg",
-      "Pentacles11.jpg","Pentacles12.jpg","Pentacles13.jpg","Pentacles14.jpg",
-      "Swords01.jpg","Swords02.jpg","Swords03.jpg","Swords04.jpg","Swords05.jpg","Swords06.jpg",
-      "Swords07.jpg","Swords08.jpg","Swords09.jpg","Swords10.jpg","Swords11.jpg","Swords12.jpg",
-      "Swords13.jpg","Swords14.jpg",
-      "Wands01.jpg","Wands02.jpg","Wands03.jpg","Wands04.jpg","Wands05.jpg","Wands06.jpg",
-      "Wands07.jpg","Wands08.jpg","Wands09.jpg","Wands10.jpg","Wands11.jpg","Wands12.jpg",
-      "Wands13.jpg","Wands14.jpg"
+      "20-Judgement.jpg","21-TheWorld.jpg"
+      // ... add your Minor Arcana here ...
     ];
 
-    // Example meanings/quotes
+    // Quotes
     const defaultQuotes = [
       "A new journey begins.","The power of will shapes reality.","Trust your inner wisdom.",
       "Nurture and growth surround you.","Authority and structure will guide you.",
@@ -76,17 +80,38 @@
       "Judgement awakens truth.","Completion and unity achieved."
     ];
 
-    function drawCard() {
-      const randomIndex = Math.floor(Math.random() * cardImages.length);
-      const cardFile = cardImages[randomIndex];
-      const cardDiv = document.getElementById("card");
-      const quoteP = document.getElementById("quote");
+    function showCard(cardFile, index) {
+      document.getElementById("card").style.backgroundImage = `url(cards/${cardFile})`;
+      document.getElementById("quote").textContent =
+        defaultQuotes[index % defaultQuotes.length];
+    }
 
-      cardDiv.style.backgroundImage = `url(cards/${cardFile})`;
+    function drawByName() {
+      const name = document.getElementById("nameInput").value.trim();
+      if (!name) return alert("Please enter your name!");
+      const sum = name.split("").reduce((a, c) => a + c.charCodeAt(0), 0);
+      const index = sum % cardImages.length;
+      showCard(cardImages[index], index);
+    }
 
-      // Use a repeating quote pattern
-      const quote = defaultQuotes[randomIndex % defaultQuotes.length];
-      quoteP.textContent = quote;
+    function drawByBirthdate() {
+      const birth = document.getElementById("birthInput").value;
+      if (!birth) return alert("Please select your birthdate!");
+      const sum = birth.split("-").join("").split("").reduce((a, b) => a + parseInt(b), 0);
+      const index = sum % cardImages.length;
+      showCard(cardImages[index], index);
+    }
+
+    function drawByToday() {
+      const now = new Date();
+      const seed = now.getFullYear() + now.getMonth() + now.getDate();
+      const index = seed % cardImages.length;
+      showCard(cardImages[index], index);
+    }
+
+    function drawRandom() {
+      const index = Math.floor(Math.random() * cardImages.length);
+      showCard(cardImages[index], index);
     }
   </script>
 </body>
