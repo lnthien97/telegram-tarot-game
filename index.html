@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tarot Card Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #222;
+      color: #fff;
+    }
+    #card {
+      width: 250px;
+      height: 400px;
+      margin: 20px auto;
+      border: 3px solid #fff;
+      border-radius: 10px;
+      background-size: cover;
+      background-position: center;
+      box-shadow: 0 0 20px rgba(255,255,255,0.5);
+    }
+    #quote {
+      margin-top: 20px;
+      font-style: italic;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-top: 20px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      background: #ffcc00;
+    }
+  </style>
+</head>
+<body>
+  <h1>Tarot Draw</h1>
+  <div id="card"></div>
+  <p id="quote">Click the button to reveal a card...</p>
+  <button onclick="drawCard()">Draw Card</button>
+
+  <script>
+    // List of your card images
+    const cardImages = [
+      "00-TheFool.jpg","01-TheMagician.jpg","02-TheHighPriestess.jpg","03-TheEmpress.jpg",
+      "04-TheEmperor.jpg","05-TheHierophant.jpg","06-TheLovers.jpg","07-TheChariot.jpg",
+      "08-Strength.jpg","09-TheHermit.jpg","10-WheelOfFortune.jpg","11-Justice.jpg",
+      "12-TheHangedMan.jpg","13-Death.jpg","14-Temperance.jpg","15-TheDevil.jpg",
+      "16-TheTower.jpg","17-TheStar.jpg","18-TheMoon.jpg","19-TheSun.jpg",
+      "20-Judgement.jpg","21-TheWorld.jpg",
+      "Cups01.jpg","Cups02.jpg","Cups03.jpg","Cups04.jpg","Cups05.jpg","Cups06.jpg",
+      "Cups07.jpg","Cups08.jpg","Cups09.jpg","Cups10.jpg","Cups11.jpg","Cups12.jpg",
+      "Cups13.jpg","Cups14.jpg",
+      "Pentacles01.jpg","Pentacles02.jpg","Pentacles03.jpg","Pentacles04.jpg","Pentacles05.jpg",
+      "Pentacles06.jpg","Pentacles07.jpg","Pentacles08.jpg","Pentacles09.jpg","Pentacles10.jpg",
+      "Pentacles11.jpg","Pentacles12.jpg","Pentacles13.jpg","Pentacles14.jpg",
+      "Swords01.jpg","Swords02.jpg","Swords03.jpg","Swords04.jpg","Swords05.jpg","Swords06.jpg",
+      "Swords07.jpg","Swords08.jpg","Swords09.jpg","Swords10.jpg","Swords11.jpg","Swords12.jpg",
+      "Swords13.jpg","Swords14.jpg",
+      "Wands01.jpg","Wands02.jpg","Wands03.jpg","Wands04.jpg","Wands05.jpg","Wands06.jpg",
+      "Wands07.jpg","Wands08.jpg","Wands09.jpg","Wands10.jpg","Wands11.jpg","Wands12.jpg",
+      "Wands13.jpg","Wands14.jpg"
+    ];
+
+    // Example meanings/quotes
+    const defaultQuotes = [
+      "A new journey begins.","The power of will shapes reality.","Trust your inner wisdom.",
+      "Nurture and growth surround you.","Authority and structure will guide you.",
+      "Wisdom from tradition.","A choice of love and union.","Victory through determination.",
+      "Strength comes from within.","Seek solitude and reflection.","The wheel turns, fate shifts.",
+      "Justice balances all actions.","Surrender brings new perspective.","Endings bring new beginnings.",
+      "Balance and patience are key.","Temptations may bind you.","Sudden change shakes the ground.",
+      "Hope shines bright.","Illusions cloud the night.","Joy and vitality rise.",
+      "Judgement awakens truth.","Completion and unity achieved."
+    ];
+
+    function drawCard() {
+      const randomIndex = Math.floor(Math.random() * cardImages.length);
+      const cardFile = cardImages[randomIndex];
+      const cardDiv = document.getElementById("card");
+      const quoteP = document.getElementById("quote");
+
+      cardDiv.style.backgroundImage = `url(cards/${cardFile})`;
+
+      // Use a repeating quote pattern
+      const quote = defaultQuotes[randomIndex % defaultQuotes.length];
+      quoteP.textContent = quote;
+    }
+  </script>
+</body>
+</html>
